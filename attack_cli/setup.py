@@ -1,7 +1,7 @@
 import json
 
-from models import Technique, Tactic, APT
-from enterprise_attack import enterprise
+from .models import Technique, Tactic, APT
+from .enterprise_attack import enterprise
 
 
 class SetupTactic(object):

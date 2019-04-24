@@ -1,5 +1,5 @@
-from models import Tactic, Technique, APT, TacticTechniqueMap, TechniqueAPTMap
-from setup import SetupAPTGroups, SetupTactic, SetupTechniques
+from .models import Tactic, Technique, APT, TacticTechniqueMap, TechniqueAPTMap
+from .setup import SetupAPTGroups, SetupTactic, SetupTechniques
 
 
 class AttackNavigator(object):
