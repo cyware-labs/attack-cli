@@ -1,12 +1,14 @@
 class APT(object):
     COUNTER = 0
 
-    def __init__(self, name, description='', country=''):
+    def __init__(self, name, description='', country='',
+                 mitre_id=''):
         self.id = self.COUNTER
         self.__class__.COUNTER += 1
         self.name = name
         self.description = description
         self.country = country
+        self.mitre_id = mitre_id
 
     def get_details(self, relation=False):
         details = dict(self.__dict__)
@@ -24,7 +26,8 @@ class APT(object):
 class Tactic(object):
     COUNTER = 0
 
-    def __init__(self, name, description='', phase='', url='', domain=''):
+    def __init__(self, name, description='', phase='', url='', domain='',
+                 slug=''):
 
         self.id = self.COUNTER
         self.__class__.COUNTER += 1
@@ -33,6 +36,7 @@ class Tactic(object):
         self.phase = phase
         self.url = url
         self.domain = domain
+        self.slug = slug
 
     def get_details(self, relation=False):
         details = dict(self.__dict__)
@@ -51,16 +55,19 @@ class Tactic(object):
 class Technique(object):
     COUNTER = 0
 
-    def __init__(self, name, description='', references=None, mitre_technique_id=''):
+    def __init__(self, name, description='', references=None, mitre_technique_id='',
+                 tactic_slugs=None):
         if references is None:
             references = []
-
+        if tactic_slugs is None:
+            tactic_slugs = []
         self.id = self.COUNTER
         self.__class__.COUNTER += 1
         self.name = name
         self.description = description
         self.references = references
         self.mitre_technique_id = mitre_technique_id
+        self.tactic_slugs = tactic_slugs
 
     def get_details(self, relation=False):
         details = dict(self.__dict__)
@@ -115,4 +122,6 @@ class TechniqueAPTMap(object):
     @classmethod
     def get_techniques_for_apt(cls, apt_id):
         return cls.apts_to_techniques_map.get(apt_id, [])
+
+
 
