@@ -119,7 +119,8 @@ class AttackNavigator(object):
             tactic_slugs = technique.tactic_slugs
             tactics = self.tactics.values()
             for tactic in tactics:
-                tactic_technique_map_obj.add_mapping(tactic, technique)
+                if tactic.slug in tactic_slugs:
+                    tactic_technique_map_obj.add_mapping(tactic, technique)
 
         apt_groups = SetupAPTGroups().do_setup()
         for apt in apt_groups:
