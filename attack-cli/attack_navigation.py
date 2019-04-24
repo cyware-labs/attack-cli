@@ -40,8 +40,13 @@ class AttackNavigator(object):
     def get_tactic(self, id_param, raise_exception=False):
         return self._get_details(self.tactics, id_param, raise_exception)
 
-    def get_techniques(self, search_param=None):
-        return
+    def get_techniques(self, query=None):
+        if query is None:
+            return [technique.get_details(relation=True)
+                    for technique in self.techniques.values()]
+
+        result = self._search(self.techniques, ['name'], query)
+        return result
 
     def get_technique(self, id_param, raise_exception=False):
         return self._get_details(self.techniques, id_param, raise_exception)
@@ -61,6 +66,9 @@ class AttackNavigator(object):
 
 
         b = Technique('test technique')
+        self.techniques[b.id] = b
+
+        b = Technique('test technique 1')
         self.techniques[b.id] = b
 
         e = TacticTechniqueMap()
