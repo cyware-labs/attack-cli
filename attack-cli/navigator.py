@@ -5,8 +5,12 @@ class Main(object):
         print('Welcome to the World!!!!!')
         a = AttackNavigator()
         a.initialize()
-        print('Sending you list of tactics')
         print(a.get_tactics())
+        print(a.get_tactic(0))
+        print(a.get_techniques())
+        print(a.get_technique(0))
+        print(a.get_apts())
+        print(a.get_apt(0))
 
 
 

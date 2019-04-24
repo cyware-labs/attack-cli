@@ -8,6 +8,9 @@ class APT(object):
         self.description = description
         self.country = country
 
+    def get_details(self):
+        return self.__dict__
+
 
 class Tactic(object):
     COUNTER = 0
@@ -20,9 +23,7 @@ class Tactic(object):
         self.url = url
 
     def get_details(self):
-        return {
-            'name': self.name
-        }
+        return self.__dict__
 
 
 class Technique(object):
@@ -38,6 +39,9 @@ class Technique(object):
         self.description = description
         self.references = references
         self.mitre_technique_id = mitre_technique_id
+
+    def get_details(self):
+        return self.__dict__
 
 
 class TacticTechniqueMap(object):
@@ -57,7 +61,7 @@ class AttackNavigator(object):
     def __init__(self):
         self.apts = {}
         self.tactics = {}
-        self.techniques = []
+        self.techniques = {}
         self.tactic_technique_map = None
         self.apt_technique_map = None
 
@@ -68,19 +72,40 @@ class AttackNavigator(object):
         if search_param is None:
             return [tactic.get_details() for tactic in self.tactics.values()]
 
-    def get_tactic(self, id_param):
-        pass
+    def _get_details(self, param_dict, key, raise_exception=False):
+        instance = param_dict.get(key)
+        if not instance:
+            if raise_exception:
+                raise Exception("Instance not found")
+            else:
+                return None
+
+        return instance.get_details()
+
+    def get_tactic(self, id_param, raise_exception=False):
+        return self._get_details(self.tactics, id_param, raise_exception)
 
     def get_techniques(self, search_param=None):
-        pass
+        return
 
-    def get_technique(self, technique_id):
-        pass
+    def get_technique(self, id_param, raise_exception=False):
+        return self._get_details(self.techniques, id_param, raise_exception)
+
+    def get_apts(self, search_params=None):
+        return
+
+    def get_apt(self, id_param, raise_exception=False):
+        return self._get_details(self.apts, id_param, raise_exception)
 
     def _fetch_data(self):
         a = Tactic('test tactics')
         self.tactics[a.id] = a
-        pass
+
+        b = Technique('test technique')
+        self.techniques[b.id] = b
+
+        c = APT('test apt')
+        self.apts[c.id] = c
 
 
 
