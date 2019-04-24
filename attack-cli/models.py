@@ -1,19 +1,17 @@
 class APT(object):
     COUNTER = 0
-    def __init__(self, name, description='', state_sponsor='', suspected_victims=None):
-        if suspected_victims is None:
-            suspected_victims = []
 
+    def __init__(self, name, description='', country=''):
         self.id = self.COUNTER
         self.COUNTER += 1
         self.name = name
         self.description = description
-        self.state_sponsor = state_sponsor
-        self.suspected_victims = suspected_victims
+        self.country = country
 
 
 class Tactic(object):
     COUNTER = 0
+
     def __init__(self, name):
         self.id = self.COUNTER
         self.COUNTER += 1
@@ -27,6 +25,7 @@ class Tactic(object):
 
 class Technique(object):
     COUNTER = 0
+
     def __init__(self, name):
         self.id = self.COUNTER
         self.COUNTER += 1
