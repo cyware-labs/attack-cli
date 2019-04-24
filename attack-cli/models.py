@@ -3,7 +3,7 @@ class APT(object):
 
     def __init__(self, name, description='', country=''):
         self.id = self.COUNTER
-        self.COUNTER += 1
+        self.__class__.COUNTER += 1
         self.name = name
         self.description = description
         self.country = country
@@ -15,10 +15,10 @@ class APT(object):
 class Tactic(object):
     COUNTER = 0
 
-    def __init__(self, name, description, phase, url, domain):
+    def __init__(self, name, description='', phase='', url='', domain=''):
 
         self.id = self.COUNTER
-        self.COUNTER += 1
+        self.__class__.COUNTER += 1
         self.name = name
         self.description = description
         self.phase = phase
@@ -37,7 +37,7 @@ class Technique(object):
             references = []
 
         self.id = self.COUNTER
-        self.COUNTER += 1
+        self.__class__.COUNTER += 1
         self.name = name
         self.description = description
         self.references = references

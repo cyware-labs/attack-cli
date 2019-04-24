@@ -1,4 +1,4 @@
-from models import AttackNavigator
+from attack_navigation import AttackNavigator
 
 class Main(object):
     def execute(self):
