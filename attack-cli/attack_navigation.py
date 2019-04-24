@@ -1,4 +1,5 @@
 from models import Tactic, Technique, APT, TacticTechniqueMap, TechniqueAPTMap
+from .setup import SetupAPTGroups, SetupTactic, SetupTechniques
 
 
 class AttackNavigator(object):
@@ -63,44 +64,65 @@ class AttackNavigator(object):
         return self._get_details(self.apts, id_param, raise_exception)
 
     def _fetch_data(self):
-        a1 = Tactic('Tactic 1')
-        self.tactics[a1.id] = a1
+        # a1 = Tactic('Tactic 1')
+        # self.tactics[a1.id] = a1
+        #
+        # a2 = Tactic('Tactic 2')
+        # self.tactics[a2.id] = a2
+        #
+        # a3 = Tactic('Tactic 3')
+        # self.tactics[a3.id] = a3
+        #
+        #
+        # b1 = Technique('Technique 1')
+        # self.techniques[b1.id] = b1
+        #
+        # b2 = Technique('Technique 2')
+        # self.techniques[b2.id] = b2
+        #
+        # b3 = Technique('Technique 3')
+        # self.techniques[b3.id] = b3
+        #
+        # e = TacticTechniqueMap
+        # e.add_mapping(a1, b1)
+        # e.add_mapping(a1, b2)
+        # e.add_mapping(a2, b2)
+        # e.add_mapping(a3, b3)
+        #
+        # c1 = APT('APT 1')
+        # self.apts[c1.id] = c1
+        #
+        # c2 = APT('APT 2')
+        # self.apts[c2.id] = c2
+        #
+        #
+        # c3 = APT('APT 3')
+        # self.apts[c3.id] = c3
+        #
+        # f = TechniqueAPTMap
+        # f.add_mapping(c1, b1)
+        # f.add_mapping(c1, b2)
+        # f.add_mapping(c1, b3)
+        # f.add_mapping(c3, b3)
+        # f.add_mapping(c2, b2)
+        tactic_technique_map_obj = TacticTechniqueMap
+        tactics = SetupTactic().do_setup()
+        for tactic in tactics:
+            self.tactics[tactic.id] = tactic
+        techniques = SetupTechniques().do_setup()
+        for technique in techniques:
+            self.technique[technique.id] = technique
 
-        a2 = Tactic('Tactic 2')
-        self.tactics[a2.id] = a2
+        technique_to_tactic_map = {}
+        for technique in techniques:
+            technique_tactics = []
+            tactic_slugs = technique.tactic_slugs
+            tactics = self.tactics.values
+            for tactic in tactics:
+                tactic_technique_map_obj.add_mapping(tactic, technique)
 
-        a3 = Tactic('Tactic 3')
-        self.tactics[a3.id] = a3
-
-
-        b1 = Technique('Technique 1')
-        self.techniques[b1.id] = b1
-
-        b2 = Technique('Technique 2')
-        self.techniques[b2.id] = b2
-
-        b3 = Technique('Technique 3')
-        self.techniques[b3.id] = b3
-
-        e = TacticTechniqueMap
-        e.add_mapping(a1, b1)
-        e.add_mapping(a1, b2)
-        e.add_mapping(a2, b2)
-        e.add_mapping(a3, b3)
-
-        c1 = APT('APT 1')
-        self.apts[c1.id] = c1
-
-        c2 = APT('APT 2')
-        self.apts[c2.id] = c2
-
-
-        c3 = APT('APT 3')
-        self.apts[c3.id] = c3
-
-        f = TechniqueAPTMap
-        f.add_mapping(c1, b1)
-        f.add_mapping(c1, b2)
-        f.add_mapping(c1, b3)
-        f.add_mapping(c3, b3)
-        f.add_mapping(c2, b2)
+        apt_groups = SetupAPTGroups().do_setup()
+        for apt in apt_groups:
+            self.apts[apt.id] = apt
+        # c = APT('test apt')
+        # self.apts[c.id] = c
