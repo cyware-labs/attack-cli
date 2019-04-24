@@ -1,22 +1,22 @@
-from models import Tactic, Technique, APT
+from models import Tactic, Technique, APT, TacticTechniqueMap
 
 class AttackNavigator(object):
     def __init__(self):
         self.apts = {}
         self.tactics = {}
         self.techniques = {}
-        self.tactic_technique_map = None
-        self.apt_technique_map = None
+
 
     def initialize(self):
         self._fetch_data()
 
-    def get_tactics(self, search_param=None):
-        if search_param is None:
-            return [tactic.get_details() for tactic in self.tactics.values()]
+    def get_tactics(self, query=None):
+        if query is None:
+            return [tactic.get_details(relation=True) for tactic in self.tactics.values()]
 
-        return [i.get_details() for i in self._search(self.tactics, ['name'],
-                                                    search_param)]
+        result = self._search(self.tactics, ['name'], query)
+        return result
+
 
     def _get_details(self, param_dict, key, raise_exception=False):
         instance = param_dict.get(key)
@@ -26,7 +26,7 @@ class AttackNavigator(object):
             else:
                 return None
 
-        return instance.get_details()
+        return instance.get_details(relation=True)
 
     def _search(self, param_dict, search_keys, search_value):
         result = set()
@@ -35,7 +35,7 @@ class AttackNavigator(object):
                 if search_value in getattr(value, search_key, None):
                     result.add(value)
 
-        return result
+        return [value.get_details(relation=True) for value in result]
 
     def get_tactic(self, id_param, raise_exception=False):
         return self._get_details(self.tactics, id_param, raise_exception)
@@ -62,6 +62,9 @@ class AttackNavigator(object):
 
         b = Technique('test technique')
         self.techniques[b.id] = b
+
+        e = TacticTechniqueMap()
+        e.add_mapping(a, b)
 
         c = APT('test apt')
         self.apts[c.id] = c

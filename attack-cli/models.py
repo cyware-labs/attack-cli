@@ -8,7 +8,7 @@ class APT(object):
         self.description = description
         self.country = country
 
-    def get_details(self):
+    def get_details(self, relation=False):
         return self.__dict__
 
 
@@ -25,8 +25,18 @@ class Tactic(object):
         self.url = url
         self.domain = domain
 
-    def get_details(self):
-        return self.__dict__
+    def get_details(self, relation=False):
+        details = dict(self.__dict__)
+        if not relation:
+            return details
+
+        techniques = TacticTechniqueMap.get_techniques_for_tactic(self.id)
+        technique_details = [technique.get_details(relation=False)
+                             for technique in techniques]
+        details['techniques'] = technique_details
+
+        return details
+
 
 
 class Technique(object):
@@ -43,21 +53,36 @@ class Technique(object):
         self.references = references
         self.mitre_technique_id = mitre_technique_id
 
-    def get_details(self):
-        return self.__dict__
+    def get_details(self, relation=False):
+        details = dict(self.__dict__)
+        if not relation:
+            return details
+        tactics = TacticTechniqueMap.get_tactics_for_technique(self.id)
+        tactics_details = [tactic.get_details(relation=False)
+                           for tactic in tactics]
+        details['tactics'] = tactics_details
 
+        return details
 
 class TacticTechniqueMap(object):
-    def __init__(self):
-        self.tactics_to_techniques_map = {}
-        self.techniques_to_tactics_map = {}
+    tactics_to_techniques_map = {}
+    techniques_to_tactics_map = {}
 
-    def add_mapping(self, tactic, technique):
-        self.tactics_to_techniques_map.setdefault(tactic.id, [])
-        self.tactics_to_techniques_map[tactic.id].append(technique)
+    @classmethod
+    def add_mapping(cls, tactic, technique):
+        cls.tactics_to_techniques_map.setdefault(tactic.id, [])
+        cls.tactics_to_techniques_map[tactic.id].append(technique)
 
-        self.techniques_to_tactics_map.setdefault(technique.id, [])
-        self.tactics_to_techniques_map[technique.id].append(tactic)
+        cls.techniques_to_tactics_map.setdefault(technique.id, [])
+        cls.techniques_to_tactics_map[technique.id].append(tactic)
+
+    @classmethod
+    def get_tactics_for_technique(cls, technique_id):
+        return cls.techniques_to_tactics_map.get(technique_id, [])
+
+    @classmethod
+    def get_techniques_for_tactic(cls, tactic_id):
+        return cls.tactics_to_techniques_map.get(tactic_id, [])
 
 
 
