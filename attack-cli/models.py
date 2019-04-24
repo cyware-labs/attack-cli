@@ -54,7 +54,6 @@ class Tactic(object):
         return details
 
 
-
 class Technique(object):
     COUNTER = 0
 

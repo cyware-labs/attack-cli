@@ -8,7 +8,6 @@ class AttackNavigator(object):
         self.tactics = {}
         self.techniques = {}
 
-
     def initialize(self):
         self._fetch_data()
 
@@ -18,7 +17,6 @@ class AttackNavigator(object):
 
         result = self._search(self.tactics, ['name'], query)
         return result
-
 
     def _get_details(self, param_dict, key, raise_exception=False):
         instance = param_dict.get(key)
@@ -125,5 +123,16 @@ class AttackNavigator(object):
         apt_groups = SetupAPTGroups().do_setup()
         for apt in apt_groups:
             self.apts[apt.id] = apt
-        # c = APT('test apt')
-        # self.apts[c.id] = c
+
+        tech_apt_map_obj = TechniqueAPTMap
+        enterprise_objects = enterprise['objects']
+        for enterprise_object in enterprise_objects:
+            if (enterprise_object['type'] == 'relationship'
+                    and enterprise_object['source_ref'].startswith('intrusion-set')
+                    and enterprise_object['target_ref'].startswith('attack-pattern')):
+                for technique in self.techniques.values():
+                    if technique.mitre_technique_id == enterprise_object['target_ref']:
+                        for apt in self.apts.values():
+                            if apt.mitre_id == enterprise_object['source_ref']:
+                                tech_apt_map_obj.add_mapping(apt, technique)
+
