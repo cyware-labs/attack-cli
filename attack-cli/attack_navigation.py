@@ -1,5 +1,5 @@
 from models import Tactic, Technique, APT, TacticTechniqueMap, TechniqueAPTMap
-from .setup import SetupAPTGroups, SetupTactic, SetupTechniques
+from setup import SetupAPTGroups, SetupTactic, SetupTechniques
 
 
 class AttackNavigator(object):
@@ -111,13 +111,13 @@ class AttackNavigator(object):
             self.tactics[tactic.id] = tactic
         techniques = SetupTechniques().do_setup()
         for technique in techniques:
-            self.technique[technique.id] = technique
+            self.techniques[technique.id] = technique
 
         technique_to_tactic_map = {}
         for technique in techniques:
             technique_tactics = []
             tactic_slugs = technique.tactic_slugs
-            tactics = self.tactics.values
+            tactics = self.tactics.values()
             for tactic in tactics:
                 tactic_technique_map_obj.add_mapping(tactic, technique)
 

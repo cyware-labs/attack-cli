@@ -55,19 +55,21 @@ class Tactic(object):
 class Technique(object):
     COUNTER = 0
 
-    def __init__(self, name, description='', references=None, mitre_technique_id='',
-                 tactic_slugs=None):
-        if references is None:
-            references = []
+    def __init__(self, name, description='', external_references=None,
+                 mitre_technique_id='',
+                 tactic_slugs=None, type='', ):
+        if external_references is None:
+            external_references = []
         if tactic_slugs is None:
             tactic_slugs = []
         self.id = self.COUNTER
         self.__class__.COUNTER += 1
         self.name = name
         self.description = description
-        self.references = references
+        self.external_references = external_references
         self.mitre_technique_id = mitre_technique_id
         self.tactic_slugs = tactic_slugs
+        self.type = type
 
     def get_details(self, relation=False):
         details = dict(self.__dict__)

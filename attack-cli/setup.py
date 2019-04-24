@@ -1,7 +1,7 @@
 import json
 
-from .models import Technique, Tactic, APT
-from .enterprise_attack import enterprise
+from models import Technique, Tactic, APT
+from enterprise_attack import enterprise
 
 
 class SetupTactic(object):
@@ -108,7 +108,7 @@ class SetupAPTGroups(object):
                 'mitre_id': enterprise_object['id'],
             }
             apt_group = APT(**data)
-            apt_list.add(apt_group)
+            apt_list.append(apt_group)
         return apt_list
 
 
