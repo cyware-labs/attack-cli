@@ -12,10 +12,12 @@ class APT(object):
 class Tactic(object):
     COUNTER = 0
 
-    def __init__(self, name):
+    def __init__(self, name, description='', url=''):
         self.id = self.COUNTER
         self.COUNTER += 1
         self.name = name
+        self.description = description
+        self.url = url
 
     def get_details(self):
         return {
@@ -26,10 +28,16 @@ class Tactic(object):
 class Technique(object):
     COUNTER = 0
 
-    def __init__(self, name):
+    def __init__(self, name, description='', references=None, mitre_technique_id=''):
+        if references is None:
+            references = []
+
         self.id = self.COUNTER
         self.COUNTER += 1
         self.name = name
+        self.description = description
+        self.references = references
+        self.mitre_technique_id = mitre_technique_id
 
 
 class TacticTechniqueMap(object):
@@ -72,6 +80,7 @@ class AttackNavigator(object):
     def _fetch_data(self):
         a = Tactic('test tactics')
         self.tactics[a.id] = a
+        pass
 
 
 
