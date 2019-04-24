@@ -1,4 +1,5 @@
-from models import Tactic, Technique, APT, TacticTechniqueMap
+from models import Tactic, Technique, APT, TacticTechniqueMap, TechniqueAPTMap
+
 
 class AttackNavigator(object):
     def __init__(self):
@@ -51,28 +52,48 @@ class AttackNavigator(object):
     def get_technique(self, id_param, raise_exception=False):
         return self._get_details(self.techniques, id_param, raise_exception)
 
-    def get_apts(self, search_params=None):
-        return
+    def get_apts(self, query=None):
+        if query is None:
+            return [apt.get_details(relation=True) for apt in self.apts.values()]
+
+        result = self._search(self.apts, ['name'], query)
+        return result
 
     def get_apt(self, id_param, raise_exception=False):
         return self._get_details(self.apts, id_param, raise_exception)
 
     def _fetch_data(self):
-        a = Tactic('Hello')
-        self.tactics[a.id] = a
+        a1 = Tactic('Tactic 1')
+        self.tactics[a1.id] = a1
 
-        a = Tactic('World')
-        self.tactics[a.id] = a
+        a2 = Tactic('Tactic 2')
+        self.tactics[a2.id] = a2
+
+        a3 = Tactic('Tactic 3')
+        self.tactics[a3.id] = a3
 
 
-        b = Technique('test technique')
-        self.techniques[b.id] = b
+        b1 = Technique('Technique 1')
+        self.techniques[b1.id] = b1
 
-        b = Technique('test technique 1')
-        self.techniques[b.id] = b
+        b2 = Technique('Technique 2')
+        self.techniques[b2.id] = b2
+
+        b3 = Technique('Technique 3')
+        self.techniques[b2.id] = b2
 
         e = TacticTechniqueMap()
-        e.add_mapping(a, b)
+        e.add_mapping(a1, b1)
+        e.add_mapping(a1, b2)
+        e.add_mapping(a2, b2)
+        e.add_mapping(a3, b3)
 
-        c = APT('test apt')
-        self.apts[c.id] = c
+        c1 = APT('APT 1')
+        self.apts[c1.id] = c1
+
+        c2 = APT('APT 2')
+        self.apts[c2.id] = c2
+
+
+        c3 = APT('APT 3')
+        self.apts[c3.id] = c3

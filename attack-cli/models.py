@@ -9,7 +9,16 @@ class APT(object):
         self.country = country
 
     def get_details(self, relation=False):
-        return self.__dict__
+        details = dict(self.__dict__)
+        if not relation:
+            return details
+
+        techniques = TechniqueAPTMap.get_techniques_for_apt(self.id)
+        technique_details = [technique.get_details(relation=False)
+                             for technique in techniques]
+        details['techniques'] = technique_details
+
+        return details
 
 
 class Tactic(object):
@@ -64,6 +73,7 @@ class Technique(object):
 
         return details
 
+
 class TacticTechniqueMap(object):
     tactics_to_techniques_map = {}
     techniques_to_tactics_map = {}
@@ -85,6 +95,24 @@ class TacticTechniqueMap(object):
         return cls.tactics_to_techniques_map.get(tactic_id, [])
 
 
+class TechniqueAPTMap(object):
+    apts_to_techniques_map = {}
+    techniques_to_apts_map = {}
+
+    @classmethod
+    def add_mapping(cls, apt, technique):
+        cls.apts_to_techniques_map.setdefault(apt.id, [])
+        cls.apts_to_techniques_map[apt.id].append(technique)
+
+        cls.techniques_to_apts_map.setdefault(technique.id, [])
+        cls.techniques_to_apts_map[technique.id].append(apt)
 
 
+    @classmethod
+    def get_apts_for_technique(cls, technique_id):
+        return cls.techniques_to_apts_map.get(technique_id, [])
+
+    @classmethod
+    def get_techniques_for_apt(cls, apt_id):
+        return cls.apts_to_techniques_map.get(apt_id, [])
 
