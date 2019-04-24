@@ -80,9 +80,9 @@ class AttackNavigator(object):
         self.techniques[b2.id] = b2
 
         b3 = Technique('Technique 3')
-        self.techniques[b2.id] = b2
+        self.techniques[b3.id] = b3
 
-        e = TacticTechniqueMap()
+        e = TacticTechniqueMap
         e.add_mapping(a1, b1)
         e.add_mapping(a1, b2)
         e.add_mapping(a2, b2)
@@ -97,3 +97,10 @@ class AttackNavigator(object):
 
         c3 = APT('APT 3')
         self.apts[c3.id] = c3
+
+        f = TechniqueAPTMap
+        f.add_mapping(c1, b1)
+        f.add_mapping(c1, b2)
+        f.add_mapping(c1, b3)
+        f.add_mapping(c3, b3)
+        f.add_mapping(c2, b2)
