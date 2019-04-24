@@ -1,3 +1,6 @@
+import urllib
+import json
+
 class APT(object):
     COUNTER = 0
 
@@ -124,6 +127,3 @@ class TechniqueAPTMap(object):
     @classmethod
     def get_techniques_for_apt(cls, apt_id):
         return cls.apts_to_techniques_map.get(apt_id, [])
-
-
-
