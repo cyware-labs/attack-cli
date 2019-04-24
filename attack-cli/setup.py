@@ -52,7 +52,6 @@ class SetupTechniques(object):
         for technique in techniques:
             title = technique.get('name')
             if not title or technique['type'] != 'attack-pattern':
-                print(technique['id'], technique['type'])
                 continue
             tactic_slugs = [phase['phase_name']
                                 for phase in technique.get('kill_chain_phases', [])]
@@ -67,27 +66,6 @@ class SetupTechniques(object):
             technique = Technique(**data)
             technique_list.append(technique)
         return technique_list
-
-            # tactics_list = [phase['phase_name']
-            #                 for phase in technique.get('kill_chain_phases', [])]
-            # tactics = AttackTactic.objects.filter(slug__in=tactics_list)
-            # technique_obj.tactics.add(*tactics)
-            #
-            # log_source_list = technique.get('x_mitre_data_sources', [])
-            # for log_source in log_source_list:
-            #     source_obj, _ = LogSource.objects.get_or_create(title=log_source,
-            #                                                  tenant=self.tenant)
-            #     source_obj.attack_techniques.add(technique_obj)
-            #
-            # defense_bypassed_list = technique.get('x_mitre_defense_bypassed', [])
-            # for defense_bypassed in defense_bypassed_list:
-            #     defense_bypassed_obj, _ = DefenseBypassed.objects.get_or_create(
-            #         title=defense_bypassed, tenant=self.tenant)
-            #     defense_bypassed_obj.attack_techniques.add(technique_obj)
-            #
-            # print('Done')
-            # # print('Created/Updated Technique {0}. Created? {1}'.format(
-            # #     technique['id'],created))
 
 
 class SetupAPTGroups(object):
@@ -114,8 +92,7 @@ class SetupAPTGroups(object):
 
 class SetupAPTGroupTechniqueMap(object):
     def __init__(self):
-        tenant = global_context_manager.get_context('tenant')
-        self.tenant = tenant
+        pass
 
     def do_setup(self):
         enterprise_objects = enterprise['objects']
@@ -129,45 +106,3 @@ class SetupAPTGroupTechniqueMap(object):
                 apt_group = APTGroup.objects.get(
                     mitre_id=enterprise_object['source_ref'])
                 apt_group.attack_techniques.add(technique)
-                print('Added {0} to APT {1}'.format(technique.title, apt_group.title))
-
-
-# class SetupSoftware(object):
-#     def __init__(self):
-#         tenant = global_context_manager.get_context('tenant')
-#         self.tenant = tenant
-#
-#     def do_setup(self):
-#         enterprise_objects = enterprise['objects']
-#         for enterprise_object in enterprise_objects:
-#             if enterprise_object['type'] == 'malware':
-#                 data = {
-#                     'title': enterprise_object['name'],
-#                     'description': enterprise_object['description'],
-#                     'external_references': enterprise_object['external_references'],
-#                     'mitre_id': enterprise_object['id'],
-#                     'tenant': self.tenant,
-#                 }
-#                 instance, created = Software.objects.update_or_create(
-#                     mitre_id=enterprise_object['id'], defaults=data)
-#                 print('Created/Updated {0}. Created? {1}'.format(
-#                     enterprise_object['name'], created))
-#
-#
-# class SetupSoftwareTechniqueMap(object):
-#     def __init__(self):
-#         tenant = global_context_manager.get_context('tenant')
-#         self.tenant = tenant
-#
-#     def do_setup(self):
-#         enterprise_objects = enterprise['objects']
-#         for enterprise_object in enterprise_objects:
-#             if (enterprise_object['type'] == 'relationship'
-#                     and enterprise_object['source_ref'].startswith('malware')
-#                     and enterprise_object['target_ref'].startswith('attack-pattern')):
-#
-#                 software = Software.objects.get(mitre_id=enterprise_object['source_ref'])
-#                 technique = AttackTechnique.objects.get(
-#                     mitre_technique_id=enterprise_object['target_ref'])
-#                 software.attack_techniques.add(technique)
-#                 print('Added {0} to Software {1}'.format(technique.title, software.title))
