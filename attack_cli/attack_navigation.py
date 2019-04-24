@@ -1,5 +1,6 @@
 from .models import Tactic, Technique, APT, TacticTechniqueMap, TechniqueAPTMap
 from .setup import SetupAPTGroups, SetupTactic, SetupTechniques
+from attack_cli import enterprise_attack
 
 
 class AttackNavigator(object):
@@ -125,7 +126,7 @@ class AttackNavigator(object):
             self.apts[apt.id] = apt
 
         tech_apt_map_obj = TechniqueAPTMap
-        enterprise_objects = enterprise['objects']
+        enterprise_objects = enterprise_attack.enterprise['objects']
         for enterprise_object in enterprise_objects:
             if (enterprise_object['type'] == 'relationship'
                     and enterprise_object['source_ref'].startswith('intrusion-set')

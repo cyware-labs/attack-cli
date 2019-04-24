@@ -1,7 +1,7 @@
 import json
 
 from .models import Technique, Tactic, APT
-from .enterprise_attack import enterprise
+from attack_cli import enterprise_attack
 
 
 class SetupTactic(object):
@@ -9,7 +9,7 @@ class SetupTactic(object):
         pass
 
     def _get_file_path(self):
-        return 'tactic_data.json'
+        return 'attack_cli/tactic_data.json'
 
     def do_setup(self):
         content_dict = self._get_tactic_content()
@@ -47,7 +47,7 @@ class SetupTechniques(object):
         pass
 
     def do_setup(self):
-        techniques = enterprise['objects']
+        techniques = enterprise_attack.enterprise['objects']
         technique_list = []
         for technique in techniques:
             title = technique.get('name')
@@ -74,7 +74,7 @@ class SetupAPTGroups(object):
 
     def do_setup(self):
         apt_list = []
-        enterprise_objects = enterprise['objects']
+        enterprise_objects = enterprise_attack.enterprise['objects']
         for enterprise_object in enterprise_objects:
             if enterprise_object['type'] != 'intrusion-set' or enterprise_object.get(
                     'revoked'):
@@ -89,20 +89,3 @@ class SetupAPTGroups(object):
             apt_list.append(apt_group)
         return apt_list
 
-
-class SetupAPTGroupTechniqueMap(object):
-    def __init__(self):
-        pass
-
-    def do_setup(self):
-        enterprise_objects = enterprise['objects']
-        for enterprise_object in enterprise_objects:
-            if (enterprise_object['type'] == 'relationship'
-                and enterprise_object['source_ref'].startswith('intrusion-set')
-                and enterprise_object['target_ref'].startswith('attack-pattern')):
-
-                technique = AttackTechnique.objects.get(
-                    mitre_technique_id=enterprise_object['target_ref'])
-                apt_group = APTGroup.objects.get(
-                    mitre_id=enterprise_object['source_ref'])
-                apt_group.attack_techniques.add(technique)

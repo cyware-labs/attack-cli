@@ -3,7 +3,6 @@ import sys
 import os
 
 
-
 def execute():
     a = AttackNavigator()
     a.initialize()
@@ -31,7 +30,6 @@ def execute():
                 print("Enter 3 to exit the CLI.")
                 try:
                     inputtt = int(input("Enter your choice:: "))
-                    os.system('clear')
                 except:
                     print("Invalid Input. Please try again")
                     os.system('clear')
@@ -74,12 +72,14 @@ def execute():
                         if inputt == 2:
                             os.system('clear')
                             print("Good Bye!")
+                            quit()
                 if inputtt == 2:
                     os.system('clear')
                     break
                 if inputtt == 3:
                     os.system('clear')
                     print("Good Bye!")
+                    quit()
         # if inputt == 2:
         #     while True:
         #         search_input = input("Enter the name of tactic you wish to search for ::")
